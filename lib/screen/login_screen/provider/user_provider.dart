@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:e_com_user/models/api_response.dart';
 import 'package:e_com_user/services/http_service.dart';
 import 'package:e_com_user/utility/snackbar_helper.dart';
@@ -23,7 +21,7 @@ class UserProvider extends ChangeNotifier {
   Future<String?> login(LoginData data) async {
     try {
       Map<String, dynamic> loginData = {
-        "email": data.name.toLowerCase(),
+        "name": data.name.toLowerCase(),
         "password": data.password,
       };
       final response = await service.addItem(
