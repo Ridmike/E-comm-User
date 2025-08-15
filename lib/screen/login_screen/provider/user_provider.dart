@@ -29,17 +29,32 @@ class UserProvider extends ChangeNotifier {
         itemData: loginData,
       );
       if (response.isOk) {
-        final ApiResponse<User> apiResponse = ApiResponse<User>.fromJson(response.body, (json) => User.fromJson(json as Map<String, dynamic>));
-        if (apiResponse.success == true) {
-          User? userLogged = apiResponse.data;
-          await saveLoginInfo(userLogged);
-          SnackBarHelper.showSuccessSnackBar(apiResponse.message);
-          return null;
-        } else {
-          SnackBarHelper.showErrorSnackBar(
-            'Faild to Login: ${apiResponse.message}',
-          );
-          return 'Faild to Login: ${apiResponse.message}';
+        try {
+          // Ensure response.body is a Map
+          final body = response.body;
+          if (body is Map<String, dynamic>) {
+            final ApiResponse<User> apiResponse = ApiResponse<User>.fromJson(
+              body,
+              (json) => User.fromJson(json as Map<String, dynamic>),
+            );
+            if (apiResponse.success == true) {
+              User? userLogged = apiResponse.data;
+              saveLoginInfo(userLogged);
+              SnackBarHelper.showSuccessSnackBar(apiResponse.message);
+              return null;
+            } else {
+              SnackBarHelper.showErrorSnackBar(
+                'Failed to Login: ${apiResponse.message}',
+              );
+              return 'Failed to Login: ${apiResponse.message}';
+            }
+          } else {
+            SnackBarHelper.showErrorSnackBar('Unexpected response format.');
+            return 'Unexpected response format.';
+          }
+        } catch (e) {
+          SnackBarHelper.showErrorSnackBar('Parsing error: $e');
+          return 'Parsing error: $e';
         }
       } else {
         SnackBarHelper.showErrorSnackBar(
