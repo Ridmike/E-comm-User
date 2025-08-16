@@ -1,3 +1,4 @@
+import 'package:e_com_user/screen/product_details/product_details_screen.dart';
 import 'package:e_com_user/utility/animations/open_container_wraper.dart';
 import 'package:e_com_user/widget/product_grid_title.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class ProductGridView extends StatelessWidget {
         itemBuilder: (context, index) {
           Product product = items[index];
           return OpenContainerWrapper(
-            nextScreen: Text('Filll this with your product detail screen'),
+            nextScreen: ProductDetailScreen(product),
             child: ProductGridTile(
               product: product,
               index: index,

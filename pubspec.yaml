@@ -45,6 +45,7 @@ dependencies:
   dropdown_button2: ^2.3.9
   flutter_cart: ^0.0.9
   http: ^1.1.0
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:
