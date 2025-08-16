@@ -177,8 +177,9 @@ class DataProvider extends ChangeNotifier {
         notifyListeners();
         if (showSnack) SnackBarHelper.showSuccessSnackBar(apiResponse.message);
       } else {
-        if (showSnack)
+        if (showSnack) {
           SnackBarHelper.showErrorSnackBar('Failed to fetch products');
+        }
       }
     } catch (e) {
       if (showSnack) SnackBarHelper.showErrorSnackBar(e.toString());
