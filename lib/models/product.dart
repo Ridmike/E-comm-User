@@ -14,31 +14,36 @@ class Product {
   String? createdAt;
   String? updatedAt;
   int? iV;
+  bool? isFavorite;
 
-  Product(
-      {this.sId,
-        this.name,
-        this.description,
-        this.quantity,
-        this.price,
-        this.offerPrice,
-        this.proCategoryId,
-        this.proSubCategoryId,
-        this.proBrandId,
-        this.proVariantTypeId,
-        this.proVariantId,
-        this.images,
-        this.createdAt,
-        this.updatedAt,
-        this.iV});
+  Product({
+    this.isFavorite,
+    this.sId,
+    this.name,
+    this.description,
+    this.quantity,
+    this.price,
+    this.offerPrice,
+    this.proCategoryId,
+    this.proSubCategoryId,
+    this.proBrandId,
+    this.proVariantTypeId,
+    this.proVariantId,
+    this.images,
+    this.createdAt,
+    this.updatedAt,
+    this.iV,
+  });
 
   Product.fromJson(Map<String, dynamic> json) {
+    isFavorite = json['isFavorite'];
     sId = json['_id'];
     name = json['name'];
     description = json['description'];
     quantity = json['quantity'];
     price = json['price']?.toDouble();
-    offerPrice = json['offerPrice']?.toDouble();;
+    offerPrice = json['offerPrice']?.toDouble();
+    ;
     proCategoryId = json['proCategoryId'] != null
         ? new ProRef.fromJson(json['proCategoryId'])
         : null;
@@ -133,14 +138,14 @@ class ProTypeRef {
 }
 
 class Images {
-  int? image;
+  String? image; // Changed from int? to String? since API is sending string
   String? url;
   String? sId;
 
   Images({this.image, this.url, this.sId});
 
   Images.fromJson(Map<String, dynamic> json) {
-    image = json['image'];
+    image = json['image']?.toString(); // Convert to String explicitly
     url = json['url'];
     sId = json['_id'];
   }

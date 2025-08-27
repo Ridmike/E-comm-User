@@ -42,10 +42,11 @@ class ProductListScreen extends StatelessWidget {
                     );
                   },
                 ),
+                const SizedBox(height: 10),
                 Consumer<DataProvider>(
                   builder: (context, dataProvider, child) {
                     return ProductGridView(
-                      items: dataProvider.products,
+                      items: dataProvider.allProducts,
                     );
                   },
                 ),
