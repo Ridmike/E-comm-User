@@ -46,7 +46,7 @@ class ProductListScreen extends StatelessWidget {
                 Consumer<DataProvider>(
                   builder: (context, dataProvider, child) {
                     return ProductGridView(
-                      items: dataProvider.allProducts,
+                      items: dataProvider.products,
                     );
                   },
                 ),
