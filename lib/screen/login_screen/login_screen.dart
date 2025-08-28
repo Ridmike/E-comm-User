@@ -1,4 +1,4 @@
-import 'package:e_com_user/utility/animations/app_color.dart';
+import 'package:e_com_user/utility/app_color.dart';
 import '../../utility/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';

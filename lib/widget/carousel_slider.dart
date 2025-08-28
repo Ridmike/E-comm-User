@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import '../utility/animations/app_color.dart';
+import '../utility/app_color.dart';
 import '../models/product.dart';
 import '../utility/utility_extention.dart';
 import 'custom_network_image.dart';

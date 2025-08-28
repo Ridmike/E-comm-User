@@ -1,5 +1,5 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:e_com_user/utility/animations/app_color.dart';
+import 'package:e_com_user/utility/app_color.dart';
 import 'package:flutter/material.dart';
 
 class MultiSelectDropDown<T> extends StatelessWidget {
