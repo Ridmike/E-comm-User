@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
 
   static const List<Widget> screens = [
     ProductListScreen(),
-    ProductFavoriteScreen(),
+    FavoriteScreen(),
     UserCartScreen(),
     ProfileScreen()
   ];

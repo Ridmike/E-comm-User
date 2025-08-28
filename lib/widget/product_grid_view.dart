@@ -2,6 +2,8 @@ import 'package:e_com_user/models/product.dart';
 import 'package:e_com_user/screen/product_details/product_details_screen.dart';
 import 'package:e_com_user/screen/product_details/provider/product_details_provider.dart';
 import 'package:e_com_user/core/data/data_provider.dart';
+import 'package:e_com_user/utility/extensions.dart';
+import 'package:e_com_user/screen/product_favourite/provider/favorite_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,9 +23,8 @@ class ProductGridView extends StatefulWidget {
 
 class _ProductGridViewState extends State<ProductGridView> {
   void _toggleFavorite(Product product) {
-    setState(() {
-      product.isFavorite = !(product.isFavorite ?? false);
-    });
+    final favoriteProvider = context.read<FavoriteProvider>();
+    favoriteProvider.updateToFavoriteList(product.sId ?? "");
     widget.onFavoriteToggle?.call(product);
   }
 
@@ -35,10 +36,10 @@ class _ProductGridViewState extends State<ProductGridView> {
       shrinkWrap: true, // important when inside SingleChildScrollView
       itemCount: widget.items.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, 
+        crossAxisCount: 2,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
-        childAspectRatio: 0.6, 
+        childAspectRatio: 0.6,
       ),
       itemBuilder: (context, index) {
         final product = widget.items[index];
@@ -87,7 +88,7 @@ class _ProductGridViewState extends State<ProductGridView> {
                         top: Radius.circular(12),
                       ),
                       child: AspectRatio(
-                        aspectRatio: 1, 
+                        aspectRatio: 1,
                         child:
                             product.images != null && product.images!.isNotEmpty
                             ? Image.network(
@@ -140,38 +141,43 @@ class _ProductGridViewState extends State<ProductGridView> {
                     Positioned(
                       top: 8,
                       right: 8,
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () {
-                            _toggleFavorite(product);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  (product.isFavorite ?? false)
-                                      ? 'Added ${product.name} to favorites'
-                                      : 'Removed ${product.name} from favorites',
+                      child: Consumer<FavoriteProvider>(
+                        builder: (context, favoriteProvider, child) {
+                          final isFavorite = favoriteProvider
+                              .checkIsItemFavourite(product.sId ?? '');
+                          return Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () {
+                                _toggleFavorite(product);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      isFavorite
+                                          ? 'Removed ${product.name} from favorites'
+                                          : 'Added ${product.name} to favorites',
+                                    ),
+                                    duration: const Duration(seconds: 1),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.8),
+                                  shape: BoxShape.circle,
                                 ),
-                                duration: const Duration(seconds: 1),
+                                child: Icon(
+                                  isFavorite
+                                      ? Icons.favorite
+                                      : Icons.favorite_border,
+                                  color: Colors.red,
+                                  size: 20,
+                                ),
                               ),
-                            );
-                          },
-                          borderRadius: BorderRadius.circular(50),
-                          child: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.8),
-                              shape: BoxShape.circle,
                             ),
-                            child: Icon(
-                              (product.isFavorite ?? false)
-                                  ? Icons.favorite
-                                  : Icons.favorite_border,
-                              color: Colors.red,
-                              size: 20,
-                            ),
-                          ),
-                        ),
+                          );
+                        },
                       ),
                     ),
                   ],
