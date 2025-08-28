@@ -1,4 +1,5 @@
 import 'package:e_com_user/screen/product_details/provider/product_details_provider.dart';
+import 'package:e_com_user/utility/extensions.dart';
 import 'package:e_com_user/widget/horizontal_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,8 +7,6 @@ import '../../../../widget/carousel_slider.dart';
 import '../../../../widget/page_wrapper.dart';
 import '../../models/product.dart';
 import 'components/product_rating_section.dart';
-
-
 
 class ProductDetailScreen extends StatelessWidget {
   final Product product;
@@ -66,7 +65,9 @@ class ProductDetailScreen extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            product.offerPrice != null ? "\$${product.offerPrice}" : "\$${product.price}",
+                            product.offerPrice != null
+                                ? "\$${product.offerPrice}"
+                                : "\$${product.price}",
                             style: Theme.of(context).textTheme.displayLarge,
                           ),
                           const SizedBox(width: 3),
@@ -83,16 +84,21 @@ class ProductDetailScreen extends StatelessWidget {
                           ),
                           const Spacer(),
                           Text(
-                            product.quantity != 0 ? "Available stock : ${product.quantity}" : "Not available",
+                            product.quantity != 0
+                                ? "Available stock : ${product.quantity}"
+                                : "Not available",
                             style: const TextStyle(fontWeight: FontWeight.w500),
-                          )
+                          ),
                         ],
                       ),
                       const SizedBox(height: 30),
                       product.proVariantId!.isNotEmpty
                           ? Text(
                               'Available ${product.proVariantTypeId?.type}',
-                              style: const TextStyle(color: Colors.red, fontSize: 16),
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 16,
+                              ),
                             )
                           : const SizedBox(),
                       Consumer<ProductDetailProvider>(
@@ -122,15 +128,21 @@ class ProductDetailScreen extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: product.quantity != 0
                               ? () {
-                                  //TODO: should complete call addToCart
+                                  // call addToCart
+                                  context.productDetailProvider.addToCart(
+                                    product,
+                                  );
                                 }
                               : null,
-                          child: const Text("Add to cart", style: TextStyle(color: Colors.white)),
+                          child: const Text(
+                            "Add to cart",
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
-                      )
+                      ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),

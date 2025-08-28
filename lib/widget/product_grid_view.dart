@@ -2,7 +2,6 @@ import 'package:e_com_user/models/product.dart';
 import 'package:e_com_user/screen/product_details/product_details_screen.dart';
 import 'package:e_com_user/screen/product_details/provider/product_details_provider.dart';
 import 'package:e_com_user/core/data/data_provider.dart';
-import 'package:e_com_user/utility/extensions.dart';
 import 'package:e_com_user/screen/product_favourite/provider/favorite_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
