@@ -3,6 +3,7 @@ import 'screen/home_screen.dart';
 import 'screen/login_screen/login_screen.dart';
 import 'screen/login_screen/provider/user_provider.dart';
 import 'screen/product_favourite/provider/favorite_provider.dart';
+import 'screen/product_cart/provider/cart_provider.dart';
 import 'utility/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cart/cart.dart';
@@ -30,6 +31,9 @@ Future<void> main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => FavoriteProvider(context.dataProvider),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CartProvider(context.userProvider),
         ),
       ],
       child: const MyApp(),

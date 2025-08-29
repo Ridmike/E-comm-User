@@ -43,9 +43,12 @@ dependencies:
   animations: ^2.0.11
   smooth_page_indicator: ^1.2.1
   dropdown_button2: ^2.3.9
-  flutter_cart: ^0.0.9
+  flutter_cart: ^0.0.8
   http: ^1.1.0
   flutter_rating_bar: ^4.0.1
+  flutter_stripe: ^11.5.0
+  razorpay_flutter: ^1.4.0
+  onesignal_flutter: ^5.3.4
 
 dev_dependencies:
   flutter_test:
@@ -71,6 +74,9 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/logo.png
+    - assets/empty_cart.png
+    - assets/ecom-logo.png
+    - assets/profile_pic.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
