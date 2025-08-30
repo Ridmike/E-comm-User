@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:e_com_user/models/api_response.dart';
 import 'package:e_com_user/services/http_service.dart';
 import 'package:e_com_user/utility/snackbar_helper.dart';
+import 'package:e_com_user/utility/utility_extention.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import '../../../models/coupon.dart';
@@ -193,10 +194,97 @@ class CartProvider extends ChangeNotifier {
   }
 
   //  Submit Order
+  submitOrder(BuildContext context) async {
+    if (selectedPaymentOption == 'cod') {
+      addOrder(context);
+    } else {
+      await stripePayment(
+        operation: () {
+          addOrder(context);
+        },
+      );
+    }
+  }
 
   //  Add Order
+  addOrder(BuildContext context) async {
+    try {
+      if (_userProvider.getLoginUsr()?.sId == null) {
+        SnackBarHelper.showErrorSnackBar('User ID is required');
+        return;
+      }
+
+      if (myCartItems.isEmpty) {
+        SnackBarHelper.showErrorSnackBar('Cart is empty');
+        return;
+      }
+
+      if (!buyNowFormKey.currentState!.validate()) {
+        SnackBarHelper.showErrorSnackBar('Please fill in all address fields');
+        return;
+      }
+
+      Map<String, dynamic> order = {
+        "userID": _userProvider.getLoginUsr()?.sId,
+        "orderStatus": "pending",
+        "items": cartItemToOrderItems(myCartItems),
+        "totalPrice": getCartGrandTotal(),
+        "shippingAddress": {
+          "phone": phoneController.text,
+          "street": streetController.text,
+          "city": cityController.text,
+          "state": stateController.text,
+          "postalCode": postalCodeController.text,
+          "country": countryController.text,
+        },
+        "paymentMethod": selectedPaymentOption,
+        "orderTotal": {
+          "subtotal": getCartSubTotal(),
+          "discount": couponCodeDiscount,
+          "total": getCartGrandTotal(),
+        },
+      };
+
+      if (couponApplied?.sId != null) {
+        order["couponCode"] = couponApplied?.sId;
+      }
+      final response = await service.addItem(
+        endpointUrl: 'orders',
+        itemData: order,
+      );
+      if (response.isOk) {
+        ApiResponse apiResponse = ApiResponse.fromJson(response.body, null);
+        if (apiResponse.success == true) {
+          SnackBarHelper.showSuccessSnackBar('Order placed successfully');
+          clearCouponDiscount();
+          clearCartItems();
+          Navigator.pop(context);
+        } else {
+          SnackBarHelper.showErrorSnackBar(
+            'Failed to place order: ${apiResponse.message}',
+          );
+        }
+      } else {
+        SnackBarHelper.showErrorSnackBar('Error: ${response.statusText}');
+      }
+    } catch (e) {
+      SnackBarHelper.showErrorSnackBar('Error placing order');
+      log('Error placing order: $e');
+    }
+  }
 
   //  Cart Item To Order Item
+  List<Map<String, dynamic>> cartItemToOrderItems(List<CartModel> cartItems) {
+    return cartItems.map((cartItem) {
+      return {
+        "productId": cartItem.productId,
+        "productName": cartItem.productName,
+        "quantity": cartItem.quantity,
+        "price": cartItem.variants.safeElementAt(0)?.price ?? 0,
+        "variant": cartItem.variants.safeElementAt(0)?.color ?? '',
+      };
+    }).toList();
+  }
 
   clearCouponDiscount() {
     couponApplied = null;
@@ -243,7 +331,7 @@ class CartProvider extends ChangeNotifier {
       Stripe.publishableKey = publishableKey;
       BillingDetails billingDetails = BillingDetails(
         email: _userProvider.getLoginUsr()?.name,
-        phone: '91234123908',
+        phone: '94766368845',
         name: _userProvider.getLoginUsr()?.name,
         address: Address(
           country: 'US',

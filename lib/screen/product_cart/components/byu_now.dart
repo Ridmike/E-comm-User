@@ -186,7 +186,7 @@ void showCustomBottomSheet(BuildContext context) {
                           // Check if the form is valid
                           if (context.cartProvider.buyNowFormKey.currentState!.validate()) {
                             context.cartProvider.buyNowFormKey.currentState!.save();
-                            //should complete call submitOrder
+                            context.cartProvider.submitOrder(context);   //should complete call submitOrder
                             return;
                           }
                         });

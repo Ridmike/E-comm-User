@@ -4,6 +4,7 @@ import 'package:e_com_user/screen/product_by_category/provider/product_by_catego
 import 'package:e_com_user/screen/product_cart/provider/cart_provider.dart';
 import 'package:e_com_user/screen/product_details/provider/product_details_provider.dart';
 import 'package:e_com_user/screen/product_favourite/provider/favorite_provider.dart';
+import 'package:e_com_user/screen/profile/provider/profile_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,7 @@ extension Providers on BuildContext {
   FavoriteProvider get favoriteProvider => Provider.of<FavoriteProvider>(this, listen: false);
   ProductDetailProvider get productDetailProvider => Provider.of<ProductDetailProvider>(this, listen: false);
   CartProvider get cartProvider => Provider.of<CartProvider>(this, listen: false);
+  ProfileProvider get profileProvider => Provider.of<ProfileProvider>(this, listen: false);
 }
 
 
