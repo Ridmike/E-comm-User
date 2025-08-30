@@ -58,7 +58,7 @@ class ProfileScreen extends StatelessWidget {
           ),
           const SizedBox(height: 15),
           const OpenContainerWrapper(
-            nextScreen: const UserAddressPageWrapper(),
+            nextScreen: UserAddressPageWrapper(),
             child: NavigationTile(
               icon: Icons.location_on,
               title: 'My Addresses',

@@ -302,6 +302,7 @@ class CartProvider extends ChangeNotifier {
     countryController.text = box.read(COUNTRY_KEY) ?? '';
   }
 
+  //  Stripe Payment
   Future<void> stripePayment({required void Function() operation}) async {
     try {
       Map<String, dynamic> paymentData = {
@@ -314,7 +315,7 @@ class CartProvider extends ChangeNotifier {
           "postal_code": postalCodeController.text,
           "country": "US",
         },
-        "amount": 100, // should complete amount grand total
+        "amount": getCartGrandTotal() * 100, // should complete amount grand total
         "currency": "usd",
         "description": "Your transaction description here",
       };
@@ -334,7 +335,7 @@ class CartProvider extends ChangeNotifier {
         phone: '94766368845',
         name: _userProvider.getLoginUsr()?.name,
         address: Address(
-          country: 'US',
+          country: 'SL',
           city: cityController.text,
           line1: streetController.text,
           line2: stateController.text,
@@ -401,7 +402,7 @@ class CartProvider extends ChangeNotifier {
       if (razorpayKey != null && razorpayKey != '') {
         var options = {
           'key': razorpayKey,
-          'amount': 100, // should complete amount grand total
+          'amount': getCartGrandTotal() * 100, // should complete amount grand total
           'name': "user",
           "currency": 'INR',
           'description': 'Your transaction description',
