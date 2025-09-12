@@ -2,7 +2,7 @@ class Order {
   ShippingAddress? shippingAddress;
   OrderTotal? orderTotal;
   String? sId;
-  UserID? userID;
+  UserID? userId;
   String? orderStatus;
   List<Items>? items;
   double? totalPrice;
@@ -12,19 +12,20 @@ class Order {
   String? orderDate;
   int? iV;
 
-  Order(
-      {this.shippingAddress,
-        this.orderTotal,
-        this.sId,
-        this.userID,
-        this.orderStatus,
-        this.items,
-        this.totalPrice,
-        this.paymentMethod,
-        this.couponCode,
-        this.trackingUrl,
-        this.orderDate,
-        this.iV});
+  Order({
+    this.shippingAddress,
+    this.orderTotal,
+    this.sId,
+    this.userId,
+    this.orderStatus,
+    this.items,
+    this.totalPrice,
+    this.paymentMethod,
+    this.couponCode,
+    this.trackingUrl,
+    this.orderDate,
+    this.iV,
+  });
 
   Order.fromJson(Map<String, dynamic> json) {
     shippingAddress = json['shippingAddress'] != null
@@ -34,8 +35,9 @@ class Order {
         ? new OrderTotal.fromJson(json['orderTotal'])
         : null;
     sId = json['_id'];
-    userID =
-    json['userID'] != null ? new UserID.fromJson(json['userID']) : null;
+    userId = json['userId'] != null
+        ? new UserID.fromJson(json['userId'])
+        : null;
     orderStatus = json['orderStatus'];
     if (json['items'] != null) {
       items = <Items>[];
@@ -43,7 +45,7 @@ class Order {
         items!.add(new Items.fromJson(v));
       });
     }
-    totalPrice = json['totalPrice']?.toDouble();;
+    totalPrice = json['totalPrice']?.toDouble();
     paymentMethod = json['paymentMethod'];
     couponCode = json['couponCode'] != null
         ? new CouponCode.fromJson(json['couponCode'])
@@ -62,8 +64,8 @@ class Order {
       data['orderTotal'] = this.orderTotal!.toJson();
     }
     data['_id'] = this.sId;
-    if (this.userID != null) {
-      data['userID'] = this.userID!.toJson();
+    if (this.userId != null) {
+      data['userId'] = this.userId!.toJson();
     }
     data['orderStatus'] = this.orderStatus;
     if (this.items != null) {
@@ -89,13 +91,14 @@ class ShippingAddress {
   String? postalCode;
   String? country;
 
-  ShippingAddress(
-      {this.phone,
-        this.street,
-        this.city,
-        this.state,
-        this.postalCode,
-        this.country});
+  ShippingAddress({
+    this.phone,
+    this.street,
+    this.city,
+    this.state,
+    this.postalCode,
+    this.country,
+  });
 
   ShippingAddress.fromJson(Map<String, dynamic> json) {
     phone = json['phone'];
@@ -152,11 +155,14 @@ class UserID {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['name'] = this.name;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = sId;
+    data['firstName'] = name;
     return data;
   }
+
+  String get fullName =>
+      [name].where((s) => s != null && s.isNotEmpty).join(' ');
 }
 
 class Items {
@@ -167,13 +173,14 @@ class Items {
   String? variant;
   String? sId;
 
-  Items(
-      {this.productID,
-        this.productName,
-        this.quantity,
-        this.price,
-        this.variant,
-        this.sId});
+  Items({
+    this.productID,
+    this.productName,
+    this.quantity,
+    this.price,
+    this.variant,
+    this.sId,
+  });
 
   Items.fromJson(Map<String, dynamic> json) {
     productID = json['productID'];
@@ -202,8 +209,12 @@ class CouponCode {
   String? discountType;
   int? discountAmount;
 
-  CouponCode(
-      {this.sId, this.couponCode, this.discountType, this.discountAmount});
+  CouponCode({
+    this.sId,
+    this.couponCode,
+    this.discountType,
+    this.discountAmount,
+  });
 
   CouponCode.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];

@@ -1,4 +1,5 @@
 import 'package:e_com_user/models/api_response.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:e_com_user/services/http_service.dart';
 import 'package:e_com_user/utility/snackbar_helper.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,17 +40,16 @@ class DataProvider extends ChangeNotifier {
   List<Order> _filteredOrders = [];
   List<Order> get orders => _filteredOrders;
 
-
-
   DataProvider() {
     getAllCategory();
     getAllSubCategories();
     getAllBrand();
     getAllProduct();
     getAllPosters();
+    
   }
 
-    // Get All Categories
+  // Get All Categories
   Future<List<Category>> getAllCategory({bool showSnack = false}) async {
     try {
       Response response = await service.getItems(endpointUrl: "categories");
@@ -253,9 +253,39 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Get All Orders by User 
-
-
+  // Get Orders By User id
+  Future<List<Order>> getOrdersByUserId(
+    String userId, {
+    bool showSnack = false,
+  }) async {
+    try {
+      // print('[getOrdersByUserId] Called with userId: $userId');
+      Response response = await service.getItems(
+        endpointUrl: "orders/orderByUserId/$userId",
+      );
+      // print('[getOrdersByUserId] API response: ${response.body}');
+      if (response.isOk) {
+        ApiResponse<List<Order>> apiResponse =
+            ApiResponse<List<Order>>.fromJson(
+              response.body,
+              (json) =>
+                  (json as List).map((item) => Order.fromJson(item)).toList(),
+            );
+        _allOrders = apiResponse.data ?? [];
+        _filteredOrders = List.from(_allOrders);
+        // print('[getOrdersByUserId] Orders fetched: ${_allOrders.length}');
+        notifyListeners();
+        if (showSnack) SnackBarHelper.showSuccessSnackBar(apiResponse.message);
+      } else {
+        // print('[getOrdersByUserId] API call not OK');
+      }
+    } catch (e) {
+      // print('[getOrdersByUserId] Error: $e');
+      if (showSnack) SnackBarHelper.showErrorSnackBar(e.toString());
+      rethrow;
+    }
+    return _filteredOrders;
+  }
 
   double calculateDiscountPercentage(num originalPrice, num? discountedPrice) {
     if (originalPrice <= 0) {
@@ -266,14 +296,13 @@ class DataProvider extends ChangeNotifier {
     num finalDiscountedPrice = discountedPrice ?? originalPrice;
 
     if (finalDiscountedPrice > originalPrice) {
-     return originalPrice.toDouble();
+      return originalPrice.toDouble();
     }
 
-    double discount = ((originalPrice - finalDiscountedPrice) / originalPrice) * 100;
+    double discount =
+        ((originalPrice - finalDiscountedPrice) / originalPrice) * 100;
 
     //? Return the discount percentage as an integer
     return discount;
   }
-
-
 }
