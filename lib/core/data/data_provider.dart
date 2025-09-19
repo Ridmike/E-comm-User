@@ -1,5 +1,4 @@
 import 'package:e_com_user/models/api_response.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:e_com_user/services/http_service.dart';
 import 'package:e_com_user/utility/snackbar_helper.dart';
 import 'package:flutter/cupertino.dart';
